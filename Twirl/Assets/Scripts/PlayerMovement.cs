@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float movementSpeed;
     [SerializeField] float jumpPower;
     [SerializeField] float jumpRange;
+    bool isGrounded;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,31 +19,39 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         move();
+
     }
 
     void move()
     {
-        if (Input.GetKey(KeyCode.W))
+        transform.Translate(Input.GetAxis("Horizontal") * Time.deltaTime * movementSpeed, 0.0f, 0.0f);
+        transform.Translate(0.0f, 0.0f, Input.GetAxis("Vertical") * Time.deltaTime * movementSpeed);
+         if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.forward * movementSpeed);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            rb.AddForce(Vector3.left * movementSpeed);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            rb.AddForce(Vector3.right * movementSpeed);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            rb.AddForce(Vector3.back * movementSpeed);
-        }
-        else if (Input.GetKey(KeyCode.Space))
-        {
-            Vector3 vc = new Vector3(0.0f, jumpRange);
-            rb.AddRelativeForce(vc * jumpPower);
+            rb.AddForce(Vector3.up * jumpPower);
         }
     }
+
+     void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Floor":
+                isGrounded = true;
+                break;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Floor":
+                isGrounded = false;
+                break;
+        }
+    }
+
+
 
 }
