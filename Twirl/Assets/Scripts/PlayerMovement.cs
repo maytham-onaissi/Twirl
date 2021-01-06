@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float movementSpeed;
     [SerializeField] float jumpPower;
     [SerializeField] AudioClip jumpSound;
-    [SerializeField] AudioClip failSound;
     float loadingTime = 1f;
     
     bool isGrounded;
@@ -55,9 +54,6 @@ public class PlayerMovement : MonoBehaviour
             case "Start game":
                 isGrounded = true;
                 Invoke("LoadNextScene", loadingTime);
-                break;
-            case "Terminate":
-                playerAudioSource.PlayOneShot(failSound);
                 break;
         }
     }
